@@ -24,7 +24,7 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container text-center">
-    Login success! Your todos:
+    Below is your todos:
     <table class="table table-sm table-hover table-bordered text-center align-middle" style="border-color: #bfbfbf">
         <caption class="visually-hidden">Todo table</caption>
         <thead class="table-danger text-center">
@@ -33,25 +33,155 @@
             <th scope="col" style="width: 60%">Content</th>
             <th scope="col">Time</th>
             <th scope="col">Date</th>
+            <th scope="row" style="width: 5%">Action</th>
         </tr>
         </thead>
 
         <tbody>
         {% if not current_user.todos %}
             <tr class="table-light">
-                <th scope="row" colspan="4">It seems that you don't have any todo. Try to create one?</th>
+                <th scope="row" colspan="5">It seems that you don't have any todo. Try to create one?</th>
             </tr>
         {% endif %}
         {% for todo in current_user.todos %}
             <tr class="table-light">
                 <th scope="row">{{ loop.index }}</th>
-                <th scope="row">{{ todo.content }}</th>
+                <th scope="row" style="white-space: pre-wrap;">{{ todo.content }}</th>
                 <th scope="row">{{ todo.time }}</th>
                 <th scope="row">{{ todo.date }}</th>
+                <th scope="row">
+                    <div class="btn-group">
+                        <div>
+                            <div class="modal fade" id="edit_todo_{{ todo.id }}" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edit todo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form class="bg-light rounded"
+                                              action="{{ url_for('base.edit_todo', todo_id=todo.id) }}"
+                                              method="post">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="content" class="col-form-label">Content:</label>
+                                                    <textarea class="form-control" id="content" name="content"
+                                                              required>{{ todo.content }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="time" class="col-form-label">Time:</label>
+                                                    <input type="time" class="form-control" id="time" name="time"
+                                                           step="1" value="{{ todo.time }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="date" class="col-form-label">Date:</label>
+                                                    <input type="date" class="form-control" id="date" name="date"
+                                                           value="{{ todo.date }}"
+                                                           required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">OK</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#edit_todo_{{ todo.id }}">
+                                <em class="bi bi-pencil-square"></em>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="modal fade" id="delete_todo_{{ todo.id }}" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete todo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form class="bg-light rounded"
+                                              action="{{ url_for('base.delete_todo', todo_id=todo.id) }}"
+                                              method="post">
+                                            <div class="modal-body">
+                                                <div class="text-danger">Are you sure to delete the following todo?
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="content" class="col-form-label">Content:</label>
+                                                    <textarea class="form-control" id="content" name="content"
+                                                              required disabled>{{ todo.content }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="time" class="col-form-label">Time:</label>
+                                                    <input type="time" class="form-control" id="time" name="time"
+                                                           step="1" value="{{ todo.time }}" required disabled>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="date" class="col-form-label">Date:</label>
+                                                    <input type="date" class="form-control" id="date" name="date"
+                                                           value="{{ todo.date }}"
+                                                           required disabled>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    No, cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">Ok, delete it</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#delete_todo_{{ todo.id }}">
+                                <em class="bi bi-trash"></em>
+                            </button>
+                        </div>
+                    </div>
+                </th>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <div>
+        <div class="modal fade" id="add_new_todo" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New todo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form class="bg-light rounded" action="{{ url_for('base.new_todo') }}" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="content" class="col-form-label">Content:</label>
+                                <textarea class="form-control" id="content" name="content" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="time" class="col-form-label">Time:</label>
+                                <input type="time" class="form-control" id="time" name="time" step="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="col-form-label">Date:</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary bi bi-plus" data-bs-toggle="modal" data-bs-target="#add_new_todo">
+            Add new todo
+        </button>
+    </div>
 </div>
 {% include 'bootstrap.html' %}
 </body>

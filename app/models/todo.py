@@ -6,7 +6,7 @@ class Todo(db.Model):
 
     id: int = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     owner_id: int = db.Column(db.BigInteger, db.ForeignKey('user.id'), nullable=False)
-    content: str = db.Column(db.String(60), nullable=False)
+    content: str = db.Column(db.Text, nullable=False)
     time = db.Column(db.Time, nullable=False)
     date = db.Column(db.Date, nullable=False)
 
