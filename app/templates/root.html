@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Login page</title>
+
+    <style>
+        /* Show it is fixed to the top */
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 4.5rem;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container text-center">
+    Login success!
+</div>
+{% include 'bootstrap.html' %}
+</body>
+</html>
