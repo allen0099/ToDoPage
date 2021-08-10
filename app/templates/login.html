@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Login page</title>
-
+    {% include "fonts.html" %}
     <style>
         /* Show it is fixed to the top */
         html,
@@ -56,7 +56,7 @@
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message[0] }} alert-dismissible fade show" role="alert">
-                    <div class="bi bi-x-circle-fill fs-5"> {{ message[1] }}</div>
+                    <div class="fs-5"> {{ message[1] }}</div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             {% endfor %}
@@ -66,7 +66,8 @@
         <div><p class="text-center fs-2 user-select-none" style="color: var(--bs-purple)">Login</p></div>
         <form class="bg-light rounded" action="{{ url_for('auth.login') }}" method="post">
             <div class="form-floating">
-                <input type="text" name="username" class="form-control" id="floatingInput" placeholder="username" required>
+                <input type="text" name="username" class="form-control" id="floatingInput" placeholder="username"
+                       required>
                 <label for="floatingInput" class="user-select-none">Username</label>
             </div>
             <div class="form-floating">

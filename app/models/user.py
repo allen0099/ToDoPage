@@ -2,6 +2,7 @@ import bcrypt
 from flask_login import UserMixin
 
 from app import db
+from app.models import Todo
 
 
 class User(db.Model, UserMixin):
@@ -11,6 +12,9 @@ class User(db.Model, UserMixin):
     username: str = db.Column(db.String(30), nullable=False, unique=True)
     password: str = db.Column(db.String(256), nullable=False)
     name: str = db.Column(db.String(30), nullable=False)
+
+    todos: list[Todo] = db.relationship('Todo', backref='owner', lazy='subquery',
+                                        cascade="all, delete-orphan")
 
     def __init__(self, username: str, password: str):
         self.username = username

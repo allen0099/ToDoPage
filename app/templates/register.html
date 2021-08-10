@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Register page</title>
-
+    {% include "fonts.html" %}
     <style>
         /* Show it is fixed to the top */
         html,
@@ -32,7 +32,7 @@
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <div class="bi bi-x-circle-fill fs-5"> {{ message }}</div>
+                        <div class="fs-5"> {{ message }}</div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 {% endfor %}

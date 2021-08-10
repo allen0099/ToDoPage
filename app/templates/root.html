@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login page</title>
-
+    <title>Home page</title>
+    {% include "fonts.html" %}
     <style>
         /* Show it is fixed to the top */
         html,
@@ -15,7 +15,6 @@
 
         body {
             display: flex;
-            align-items: center;
             padding-top: 4.5rem;
             padding-bottom: 40px;
             background-color: #f5f5f5;
@@ -25,7 +24,34 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container text-center">
-    Login success!
+    Login success! Your todos:
+    <table class="table table-sm table-hover table-bordered text-center align-middle" style="border-color: #bfbfbf">
+        <caption class="visually-hidden">Todo table</caption>
+        <thead class="table-danger text-center">
+        <tr>
+            <th scope="col"><em class="bi bi-list"></em></th>
+            <th scope="col" style="width: 60%">Content</th>
+            <th scope="col">Time</th>
+            <th scope="col">Date</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% if not current_user.todos %}
+            <tr class="table-light">
+                <th scope="row" colspan="4">It seems that you don't have any todo. Try to create one?</th>
+            </tr>
+        {% endif %}
+        {% for todo in current_user.todos %}
+            <tr class="table-light">
+                <th scope="row">{{ loop.index }}</th>
+                <th scope="row">{{ todo.content }}</th>
+                <th scope="row">{{ todo.time }}</th>
+                <th scope="row">{{ todo.date }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% include 'bootstrap.html' %}
 </body>
