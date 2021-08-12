@@ -1,7 +1,10 @@
 import os
 
+from dotenv import load_dotenv
+
 
 class Config:
+    load_dotenv(verbose=True)  # load env for unit test
     SECRET_KEY: str = os.getenv("SECRET_KEY")
 
     USE_SESSION_FOR_NEXT = True
