@@ -2,7 +2,6 @@ from flask import abort, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from ..base import base
-from ... import db
 from ...models import Todo
 
 
@@ -15,14 +14,8 @@ def new_todo():
     time: str = data.get("time")
     date: str = data.get("date")
 
-    t = Todo()
-    t.owner_id = current_user.id
-    t.content = content
-    t.time = time
-    t.date = date
-
-    db.session.add(t)
-    db.session.commit()
+    todo = Todo(current_user.id, content, time, date)
+    todo.new()
 
     return redirect(url_for("base.root"))
 
@@ -41,11 +34,7 @@ def edit_todo(todo_id: int):
     time: str = data.get("time")
     date: str = data.get("date")
 
-    todo.content = content
-    todo.time = time
-    todo.date = date
-
-    db.session.commit()
+    todo.edit(content, time, date)
 
     return redirect(url_for("base.root"))
 
@@ -58,7 +47,6 @@ def delete_todo(todo_id: int):
     if todo.owner_id != current_user.id:
         return abort(403)
 
-    db.session.delete(todo)
-    db.session.commit()
+    todo.delete()
 
     return redirect(url_for("base.root"))
