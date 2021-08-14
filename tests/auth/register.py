@@ -43,3 +43,13 @@ class RegisterTest(Base):
         response = self.register(username, name, password)
 
         self.assertMessageFlashed("Registration successful, please login to continue.", "info")
+
+    def test_register_withTelegramId(self):
+        username: str = "test"
+        name: str = "test_user"
+        password: str = "test_password"
+        telegram_id: int = 1234567890
+
+        response = self.register(username, name, password, telegram_id=telegram_id)
+
+        self.assertMessageFlashed("Registration successful, please login to continue.", "info")

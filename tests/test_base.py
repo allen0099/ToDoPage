@@ -2,7 +2,7 @@ from typing import Union
 
 from flask_testing import TestCase
 
-from app import create_app, db
+from app import create_app, db, scheduler
 
 
 class Base(TestCase):
@@ -15,16 +15,19 @@ class Base(TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        scheduler.shutdown()
 
-    def register(self, username: str, name: str, password: str, confirm_password: str = None):
+    def register(self, username: str, name: str, password: str, confirm_password: str = None, telegram_id: int = None):
         if not confirm_password:
             confirm_password = password
+
         return self.client.post("/register",
                                 follow_redirects=True,
                                 data=dict(
                                     username=username,
                                     name=name,
                                     password=password,
+                                    telegram_cid=telegram_id,
                                     confirm_password=confirm_password
                                 ))
 
