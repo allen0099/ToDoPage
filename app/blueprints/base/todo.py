@@ -15,7 +15,8 @@ def new_todo():
     date: str = data.get("date")
 
     todo = Todo(current_user.id, content, time, date)
-    todo.new()
+
+    Todo.new(todo)
 
     return redirect(url_for("base.root"))
 
@@ -34,7 +35,7 @@ def edit_todo(todo_id: int):
     time: str = data.get("time")
     date: str = data.get("date")
 
-    todo.edit(content, time, date)
+    Todo.edit(todo, content, time, date)
 
     return redirect(url_for("base.root"))
 
@@ -47,6 +48,6 @@ def delete_todo(todo_id: int):
     if todo.owner_id != current_user.id:
         return abort(403)
 
-    todo.delete()
+    Todo.delete(todo)
 
     return redirect(url_for("base.root"))

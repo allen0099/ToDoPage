@@ -1,6 +1,8 @@
 import inspect
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,6 +11,7 @@ from app.configs import config
 db: SQLAlchemy = SQLAlchemy()
 login_manager: LoginManager = LoginManager()
 login_manager.login_view = "base.root"
+scheduler = APScheduler(BackgroundScheduler(timezone="Asia/Taipei"))
 
 
 def create_app(name: str = "development") -> Flask:
@@ -19,6 +22,9 @@ def create_app(name: str = "development") -> Flask:
 
     db.init_app(app)
     login_manager.init_app(app)
+
+    if not scheduler.running:
+        scheduler.init_app(app)
 
     from app.models import User
 
@@ -56,6 +62,9 @@ def create_app(name: str = "development") -> Flask:
             sys.exit(1)
 
     with app.app_context():
+        if not scheduler.running:
+            scheduler.start()
+
         # register blueprints
         from app.blueprints.auth import auth
         app.register_blueprint(auth)

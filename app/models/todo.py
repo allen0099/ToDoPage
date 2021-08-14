@@ -10,19 +10,32 @@ class Todo(db.Model):
     time = db.Column(db.Time, nullable=False)
     date = db.Column(db.Date, nullable=False)
 
-    def new(self):
-        db.session.add(self)
+    @staticmethod
+    def new(todo: "Todo"):
+        db.session.add(todo)
         db.session.commit()
 
-    def edit(self, new_content, new_time, new_date):
-        self.content = new_content
-        self.time = new_time
-        self.date = new_date
+        from app.notify import add_notify
+        add_notify(todo)
+
+    @staticmethod
+    def edit(todo: "Todo", new_content, new_time, new_date):
+        todo.content = new_content
+        todo.time = new_time
+        todo.date = new_date
 
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
+        from app.notify import add_notify, remove_notify
+        remove_notify(f"{todo.owner_id}_{todo.id}")
+        add_notify(todo)
+
+    @staticmethod
+    def delete(todo: "Todo"):
+        from app.notify import remove_notify
+        remove_notify(f"{todo.owner_id}_{todo.id}")
+
+        db.session.delete(todo)
         db.session.commit()
 
     def __init__(self, owner_id, content, time, date):

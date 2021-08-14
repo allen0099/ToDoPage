@@ -32,6 +32,9 @@ def register():
         u: User = User(data.get("username"), data.get("password"))
         u.name = data.get("name")
 
+        if data.get("telegram_cid") and data.get("telegram_cid") != "0":
+            u.telegram_cid = data.get("telegram_cid")
+
         db.session.add(u)
         db.session.commit()
 

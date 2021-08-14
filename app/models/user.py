@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     password: str = db.Column(db.String(256), nullable=False)
     name: str = db.Column(db.String(30), nullable=False)
 
+    telegram_cid = db.Column(db.BigInteger, nullable=True)
+
     todos: list[Todo] = db.relationship('Todo', backref='owner', lazy='subquery',
                                         cascade="all, delete-orphan")
 
