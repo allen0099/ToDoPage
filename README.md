@@ -32,3 +32,8 @@ python -m unittest
 ```
 
 or simply `flask test`
+
+## pics
+
+- successfully received notify from Telegram
+  ![notify_success.png](./pic/notify_success.png) 
