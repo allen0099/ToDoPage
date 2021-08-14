@@ -8,6 +8,8 @@
 cp .env.example .env
 ```
 
+in `TELEGRAM_TOKEN` field, you should fill in bot token obtained from Telegram bot father.
+
 - install requirements from `requirements.txt`
 
 ```shell
