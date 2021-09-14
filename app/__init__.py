@@ -1,4 +1,5 @@
 import inspect
+import time
 
 import sqlalchemy
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -6,6 +7,7 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import OperationalError
 
 from app.configs import config
 
@@ -63,8 +65,16 @@ def create_app(name: str = "development") -> Flask:
             sys.exit(1)
 
     with app.app_context():
-        if not scheduler.running:
-            scheduler.start()
+        _db_ready: bool = False
+
+        while not _db_ready:
+            if not scheduler.running:
+                try:
+                    scheduler.start()
+                    _db_ready = True
+                except OperationalError:
+                    print("DB not ready, sleeping...")
+                    time.sleep(5)
 
         engine = db.engine
         if not sqlalchemy.inspect(engine).has_table(User):
