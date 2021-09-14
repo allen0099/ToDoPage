@@ -1,0 +1,25 @@
+version: "3.0"
+
+services:
+  python:
+    build: .
+    depends_on:
+      - database
+    networks:
+      - app
+    ports:
+      - "5000:5000"
+
+  database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SQL_ROOT_PASSWORD}
+      MYSQL_USER: ${SQL_ADMIN}
+      MYSQL_PASSWORD: ${SQL_PASSWORD}
+      MYSQL_DATABASE: ${SQL_SCHEMA}
+    networks:
+      - app
+
+networks:
+  app:

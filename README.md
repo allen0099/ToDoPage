@@ -22,6 +22,24 @@ pip install -r requirements.txt
 flask run
 ```
 
+### docker
+
+- requirements
+  - docker
+  - docker compose
+
+- copy `.env.example` to `.env` and fill in needed values
+
+```shell
+cp .env.example .env
+```
+
+- run docker
+
+```shell
+docker-compose up -d
+```
+
 ## tests
 
 - unittest

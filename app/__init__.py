@@ -1,5 +1,6 @@
 import inspect
 
+import sqlalchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_apscheduler import APScheduler
@@ -64,6 +65,10 @@ def create_app(name: str = "development") -> Flask:
     with app.app_context():
         if not scheduler.running:
             scheduler.start()
+
+        engine = db.engine
+        if not sqlalchemy.inspect(engine).has_table(User):
+            db.create_all()
 
         # register blueprints
         from app.blueprints.auth import auth
